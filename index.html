@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>תרגול כללי אינטגרל</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#fbfcfe;--grid:#dde6f1;--card:#ffffff;--ink:#1d3557;--muted:#4a5f80;--blue:#2453a6;--onblue:#ffffff;--red:#c8322b;--green:#1f8a55;--soft:#eef3fa;--line:#c9d6e8;--goodbg:#e7f5ec;--badbg:#fbeceb;}
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){color-scheme:dark;--paper:#141b26;--grid:#1f2a3a;--card:#1a2331;--ink:#e3eaf5;--muted:#9fb0c8;--blue:#7ea6f0;--onblue:#0f1722;--red:#f07a72;--green:#5fd197;--soft:#223047;--line:#33445e;--goodbg:#173a2a;--badbg:#422020;}
+  }
+  :root[data-theme="dark"]{color-scheme:dark;--paper:#141b26;--grid:#1f2a3a;--card:#1a2331;--ink:#e3eaf5;--muted:#9fb0c8;--blue:#7ea6f0;--onblue:#0f1722;--red:#f07a72;--green:#5fd197;--soft:#223047;--line:#33445e;--goodbg:#173a2a;--badbg:#422020;}
+  *{box-sizing:border-box}
+  :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+  html{scroll-padding-top:env(safe-area-inset-top,0px)}
+  body{margin:0;font-family:'Rubik',Arial,sans-serif;color:var(--ink);background-color:var(--paper);
+    background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+    background-size:24px 24px;min-height:100vh;line-height:1.55}
+  main{max-width:720px;margin:0 auto;padding:24px 14px 48px}
+  .sheet{background:var(--card);border:1.5px solid var(--line);border-radius:6px;padding:22px;box-shadow:4px 4px 0 var(--line)}
+  h1{font-size:1.9rem;margin:0 0 6px}
+  math{font-size:1.15em}
+  .top{display:flex;justify-content:space-between;font-size:.95rem;color:var(--muted)}
+  .bar{height:8px;background:var(--soft);border-radius:4px;margin:8px 0 4px;overflow:hidden}
+  .bar div{height:100%;background:var(--blue);transition:width .3s}
+  .rule{border-right:4px solid var(--blue);background:var(--soft);padding:12px 16px;margin:16px 0;border-radius:4px}
+  .rule h2{font-size:1.08rem;margin:0}
+  details{margin-top:8px;background:var(--card);border:1px solid var(--line);border-radius:4px;padding:8px 12px}
+  summary{cursor:pointer;color:var(--blue);font-weight:500}
+  .step{margin:6px 0}
+  .step span{font-size:.95rem}
+  .ltr{direction:ltr;text-align:center;overflow-x:auto;padding:4px 0}
+  .ask{margin:18px 0 0;font-weight:500}
+  .question{font-size:1.2rem;direction:ltr;text-align:center;margin:4px 0 16px;overflow-x:auto}
+  .options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .opt{font:inherit;font-size:1.05rem;background:var(--card);color:var(--ink);border:1.5px solid var(--line);border-radius:6px;
+    padding:14px 8px;cursor:pointer;direction:ltr;overflow-x:auto}
+  .opt:hover:not(:disabled){border-color:var(--blue)}
+  .opt.selected{border-color:var(--blue);background:var(--soft)}
+  .opt.correct{border-color:var(--green);background:var(--goodbg)}
+  .opt.wrong{border-color:var(--red);background:var(--badbg)}
+  .opt:disabled{cursor:default}
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  .btn{font:inherit;font-weight:500;background:var(--blue);color:var(--onblue);border:1.5px solid var(--blue);border-radius:6px;padding:10px 20px;cursor:pointer}
+  .btn.ghost{background:var(--card);color:var(--blue)}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  .btn:focus-visible,.opt:focus-visible,summary:focus-visible{outline:3px solid #f2b705;outline-offset:2px}
+  .feedback{font-weight:700;font-size:1.1rem;margin-top:14px}
+  .good{color:var(--green)} .bad{color:var(--red)}
+  .box{border:1.5px dashed var(--red);padding:12px 16px;margin-top:12px;border-radius:6px}
+  .box h3{color:var(--red);margin:0 0 6px;font-size:1rem}
+  .hidden{display:none}
+  .end{text-align:center}
+  .circle{display:inline-flex;flex-direction:column;width:150px;height:150px;border:4px solid var(--red);border-radius:50%;
+    align-items:center;justify-content:center;color:var(--red);transform:rotate(-7deg);margin:12px 0 6px}
+  .circle b{font-size:2.8rem;line-height:1}
+  table{width:100%;border-collapse:collapse;margin-top:18px;text-align:right}
+  th,td{border-bottom:1px solid var(--line);padding:8px 6px}
+  th{color:var(--muted);font-weight:500}
+  .end .row{justify-content:center}
+  @media (max-width:520px){.options{grid-template-columns:1fr}.sheet{padding:16px}h1{font-size:1.5rem}}
+  @media (prefers-reduced-motion:reduce){.bar div{transition:none}}
+</style>
+</head>
+<body>
+<main id="app"></main>
+
+<script>
+const R = String.raw;
+const M = s => katex.renderToString(s, {throwOnError:false, output:'mathml'});
+const D = s => katex.renderToString(s, {displayMode:true, throwOnError:false, output:'mathml'});
+
+const rules = [
+  {
+    name: "אינטגרל של חזקה",
+    f: R`\int \frac{a}{b}x^n\,dx=\frac{a\,x^{n+1}}{b(n+1)}+C`,
+    demo: { q: R`\int \frac{2}{5}x^4\,dx`, s: [
+      ["מזהים את הנתונים:", R`a=2,\quad b=5,\quad n=4`],
+      ["מציבים בכלל:", R`\frac{2x^{5}}{5\cdot 5}+C=\frac{2x^5}{25}+C`] ]},
+    demoNeg: { q: R`\int \frac{3}{x^4}\,dx`, s: [
+      ["כותבים בחזקה שלילית:", R`\int 3x^{-4}\,dx`],
+      ["מזהים את הנתונים:", R`a=3,\quad b=1,\quad n=-4`],
+      ["מציבים בכלל:", R`\frac{3x^{-3}}{-3}+C=-x^{-3}+C`],
+      ["כותבים בחזרה כשבר:", R`-\frac{1}{x^3}+C`] ]},
+    ex: [
+      { q: R`\int \frac{3}{4}x^5\,dx`,
+        o: [R`\frac{x^6}{8}+C`, R`\frac{3x^6}{20}+C`, R`\frac{15x^4}{4}+C`, R`\frac{3x^6}{4}+C`],
+        s: [["מזהים את הנתונים:", R`a=3,\quad b=4,\quad n=5`],
+            ["מציבים בכלל:", R`\frac{3x^{6}}{4\cdot 6}+C=\frac{3x^6}{24}+C`],
+            ["מצמצמים:", R`\frac{x^6}{8}+C`]] },
+      { q: R`\int \frac{x^3}{6}\,dx`,
+        o: [R`\frac{x^4}{24}+C`, R`\frac{x^4}{18}+C`, R`\frac{x^2}{2}+C`, R`\frac{x^4}{6}+C`],
+        s: [["כותבים בצורה של הכלל:", R`\int \frac{1}{6}x^3\,dx`],
+            ["מזהים את הנתונים:", R`a=1,\quad b=6,\quad n=3`],
+            ["מציבים בכלל:", R`\frac{x^{4}}{6\cdot 4}+C=\frac{x^4}{24}+C`]] },
+      { neg: true, q: R`\int \frac{8}{x^5}\,dx`,
+        o: [R`-\frac{2}{x^4}+C`, R`\frac{2}{x^4}+C`, R`-\frac{4}{3x^6}+C`, R`-\frac{40}{x^6}+C`],
+        s: [["כותבים בחזקה שלילית:", R`\int 8x^{-5}\,dx`],
+            ["מזהים את הנתונים:", R`a=8,\quad b=1,\quad n=-5`],
+            ["מציבים בכלל:", R`\frac{8x^{-4}}{-4}+C=-2x^{-4}+C`],
+            ["כותבים בחזרה כשבר:", R`-\frac{2}{x^4}+C`]] },
+      { neg: true, q: R`\int \frac{1}{2x^3}\,dx`,
+        o: [R`-\frac{1}{4x^2}+C`, R`\frac{1}{4x^2}+C`, R`-\frac{1}{x^2}+C`, R`-\frac{1}{8x^4}+C`],
+        s: [["כותבים בחזקה שלילית (שימו לב: ה-2 נשאר במכנה):", R`\int \frac{1}{2}x^{-3}\,dx`],
+            ["מזהים את הנתונים:", R`a=1,\quad b=2,\quad n=-3`],
+            ["מציבים בכלל:", R`\frac{x^{-2}}{2\cdot(-2)}+C=-\frac{x^{-2}}{4}+C`],
+            ["כותבים בחזרה כשבר:", R`-\frac{1}{4x^2}+C`]] }
+    ]
+  },
+  {
+    name: "ביטוי לינארי בחזקה",
+    f: R`\int \frac{a}{b}(mx+k)^n\,dx=\frac{a\,(mx+k)^{n+1}}{b\cdot m(n+1)}+C`,
+    demo: { q: R`\int 2(3x+1)^4\,dx`, s: [
+      ["מזהים את הנתונים:", R`a=2,\quad b=1,\quad m=3,\quad n=4`],
+      ["מציבים בכלל:", R`\frac{2(3x+1)^{5}}{3\cdot 5}+C=\frac{2(3x+1)^5}{15}+C`] ]},
+    demoNeg: { q: R`\int \frac{6}{(2x+1)^4}\,dx`, s: [
+      ["כותבים בחזקה שלילית:", R`\int 6(2x+1)^{-4}\,dx`],
+      ["מזהים את הנתונים:", R`a=6,\quad b=1,\quad m=2,\quad n=-4`],
+      ["מציבים בכלל:", R`\frac{6(2x+1)^{-3}}{2\cdot(-3)}+C=-(2x+1)^{-3}+C`],
+      ["כותבים בחזרה כשבר:", R`-\frac{1}{(2x+1)^3}+C`] ]},
+    ex: [
+      { q: R`\int 4(2x-5)^7\,dx`,
+        o: [R`\frac{(2x-5)^8}{4}+C`, R`\frac{(2x-5)^8}{2}+C`, R`56(2x-5)^6+C`, R`8(2x-5)^8+C`],
+        s: [["מזהים את הנתונים:", R`a=4,\quad b=1,\quad m=2,\quad n=7`],
+            ["מציבים בכלל:", R`\frac{4(2x-5)^{8}}{2\cdot 8}+C=\frac{4(2x-5)^8}{16}+C`],
+            ["מצמצמים:", R`\frac{(2x-5)^8}{4}+C`]] },
+      { q: R`\int \frac{1}{3}(6x+1)^5\,dx`,
+        o: [R`\frac{(6x+1)^6}{108}+C`, R`\frac{(6x+1)^6}{18}+C`, R`\frac{(6x+1)^6}{36}+C`, R`10(6x+1)^4+C`],
+        s: [["מזהים את הנתונים:", R`a=1,\quad b=3,\quad m=6,\quad n=5`],
+            ["מציבים בכלל:", R`\frac{(6x+1)^{6}}{3\cdot 6\cdot 6}+C=\frac{(6x+1)^6}{108}+C`],
+            ["שימו לב: לא לשכוח לחלק גם ב-m (המקדם של x בתוך הסוגריים).", ""]] },
+      { neg: true, q: R`\int \frac{5}{(3x-1)^2}\,dx`,
+        o: [R`-\frac{5}{3(3x-1)}+C`, R`-\frac{5}{3x-1}+C`, R`\frac{5}{3(3x-1)}+C`, R`-\frac{5}{9(3x-1)^3}+C`],
+        s: [["כותבים בחזקה שלילית:", R`\int 5(3x-1)^{-2}\,dx`],
+            ["מזהים את הנתונים:", R`a=5,\quad b=1,\quad m=3,\quad n=-2`],
+            ["מציבים בכלל:", R`\frac{5(3x-1)^{-1}}{3\cdot(-1)}+C=-\frac{5}{3}(3x-1)^{-1}+C`],
+            ["כותבים בחזרה כשבר:", R`-\frac{5}{3(3x-1)}+C`]] },
+      { neg: true, q: R`\int \frac{2}{5(4x+3)^3}\,dx`,
+        o: [R`-\frac{1}{20(4x+3)^2}+C`, R`-\frac{1}{5(4x+3)^2}+C`, R`\frac{1}{20(4x+3)^2}+C`, R`-\frac{1}{40(4x+3)^4}+C`],
+        s: [["כותבים בחזקה שלילית:", R`\int \frac{2}{5}(4x+3)^{-3}\,dx`],
+            ["מזהים את הנתונים:", R`a=2,\quad b=5,\quad m=4,\quad n=-3`],
+            ["מציבים בכלל:", R`\frac{2(4x+3)^{-2}}{5\cdot 4\cdot(-2)}+C=-\frac{2(4x+3)^{-2}}{40}+C`],
+            ["מצמצמים וכותבים בחזרה כשבר:", R`-\frac{1}{20(4x+3)^2}+C`]] }
+    ]
+  },
+  {
+    name: "f' כפול f בחזקה",
+    f: R`\int \frac{a}{b}f'(x)\cdot [f(x)]^n\,dx=\frac{a\,[f(x)]^{n+1}}{b(n+1)}+C`,
+    demo: { q: R`\int (2x+1)(x^2+x)^4\,dx`, s: [
+      ["מזהים את f ואת f':", R`f(x)=x^2+x,\qquad f'(x)=2x+1`],
+      ["הביטוי 2x+1 הוא בדיוק f', ולכן a=1, b=1, n=4:", R`\frac{(x^2+x)^5}{5}+C`] ]},
+    demoNeg: { q: R`\int \frac{2x}{(x^2+1)^3}\,dx`, s: [
+      ["כותבים בחזקה שלילית:", R`\int 2x(x^2+1)^{-3}\,dx`],
+      ["מזהים את f ואת f':", R`f(x)=x^2+1,\qquad f'(x)=2x`],
+      ["מציבים בכלל עם a=1, b=1, n=−3:", R`\frac{(x^2+1)^{-2}}{-2}+C`],
+      ["כותבים בחזרה כשבר:", R`-\frac{1}{2(x^2+1)^2}+C`] ]},
+    ex: [
+      { q: R`\int 3x^2(x^3+4)^5\,dx`,
+        o: [R`\frac{(x^3+4)^6}{6}+C`, R`\frac{x^2(x^3+4)^6}{2}+C`, R`\frac{(x^3+4)^6}{2}+C`, R`\frac{(x^3+4)^6}{18}+C`],
+        s: [["מזהים את f ואת f':", R`f(x)=x^3+4,\qquad f'(x)=3x^2`],
+            ["הביטוי 3x² הוא בדיוק f', ולכן a=1, b=1, n=5:", R`\frac{(x^3+4)^{6}}{6}+C`],
+            ["שימו לב: f' \"נעלם\" בתשובה. לא משאירים את 3x².", ""]] },
+      { q: R`\int (2x+4)(x^2+4x)^3\,dx`,
+        o: [R`\frac{(x^2+4x)^4}{4}+C`, R`\frac{(2x+4)(x^2+4x)^4}{4}+C`, R`\frac{(x^2+4x)^4}{3}+C`, R`\frac{(x^2+4x)^4}{8}+C`],
+        s: [["מזהים את f ואת f':", R`f(x)=x^2+4x,\qquad f'(x)=2x+4`],
+            ["הביטוי 2x+4 הוא בדיוק f', ולכן a=1, b=1, n=3:", R`\frac{(x^2+4x)^4}{4}+C`],
+            ["שימו לב: f' \"נעלם\" בתשובה. לא משאירים את 2x+4.", ""]] },
+      { neg: true, q: R`\int \frac{3x^2+2}{(x^3+2x)^4}\,dx`,
+        o: [R`-\frac{1}{3(x^3+2x)^3}+C`, R`\frac{1}{3(x^3+2x)^3}+C`, R`-\frac{1}{5(x^3+2x)^5}+C`, R`-\frac{3x^2+2}{3(x^3+2x)^3}+C`],
+        s: [["כותבים בחזקה שלילית:", R`\int (3x^2+2)(x^3+2x)^{-4}\,dx`],
+            ["מזהים את f ואת f':", R`f(x)=x^3+2x,\qquad f'(x)=3x^2+2`],
+            ["מציבים בכלל עם a=1, b=1, n=−4:", R`\frac{(x^3+2x)^{-3}}{-3}+C`],
+            ["כותבים בחזרה כשבר:", R`-\frac{1}{3(x^3+2x)^3}+C`]] },
+      { neg: true, q: R`\int \frac{2x+2}{(x^2+2x)^2}\,dx`,
+        o: [R`-\frac{1}{x^2+2x}+C`, R`\frac{1}{x^2+2x}+C`, R`-\frac{1}{3(x^2+2x)^3}+C`, R`-\frac{2x+2}{x^2+2x}+C`],
+        s: [["כותבים בחזקה שלילית:", R`\int (2x+2)(x^2+2x)^{-2}\,dx`],
+            ["מזהים את f ואת f':", R`f(x)=x^2+2x,\qquad f'(x)=2x+2`],
+            ["מציבים בכלל עם a=1, b=1, n=−2:", R`\frac{(x^2+2x)^{-1}}{-1}+C`],
+            ["כותבים בחזרה כשבר:", R`-\frac{1}{x^2+2x}+C`]] }
+    ]
+  },
+  {
+    name: "פירוק שבר לסכום שברים",
+    f: R`\frac{a+b}{c}=\frac{a}{c}+\frac{b}{c}`,
+    demo: { q: R`\int \frac{x^3+2x^2}{x}\,dx`, s: [
+      ["מפרקים לשני שברים:", R`\int\left(\frac{x^3}{x}+\frac{2x^2}{x}\right)dx`],
+      ["מצמצמים:", R`\int (x^2+2x)\,dx`],
+      ["מבצעים אינטגרל לכל איבר:", R`\frac{x^3}{3}+x^2+C`] ]},
+    ex: [
+      { q: R`\int \frac{6x^4+3x^2}{3x^2}\,dx`,
+        o: [R`\frac{2x^3}{3}+x+C`, R`2x^3+x+C`, R`4x+C`, R`\frac{2x^3}{3}+\frac{x^2}{2}+C`],
+        s: [["מפרקים לשני שברים:", R`\int\left(\frac{6x^4}{3x^2}+\frac{3x^2}{3x^2}\right)dx`],
+            ["מצמצמים:", R`\int (2x^2+1)\,dx`],
+            ["מבצעים אינטגרל לכל איבר:", R`\frac{2x^3}{3}+x+C`]] },
+      { q: R`\int \frac{x^5-4x^3}{2x^3}\,dx`,
+        o: [R`\frac{x^3}{6}-2x+C`, R`\frac{x^3}{3}-2x+C`, R`\frac{x^3}{6}-4x+C`, R`\frac{x^3}{2}-2x+C`],
+        s: [["מפרקים לשני שברים:", R`\int\left(\frac{x^5}{2x^3}-\frac{4x^3}{2x^3}\right)dx`],
+            ["מצמצמים:", R`\int \left(\frac{x^2}{2}-2\right)dx`],
+            ["מבצעים אינטגרל לכל איבר:", R`\frac{x^3}{2\cdot 3}-2x+C=\frac{x^3}{6}-2x+C`]] }
+    ]
+  }
+];
+
+const app = document.getElementById('app');
+let items = [], idx = 0, results = [];
+
+function shuffle(a){ a = a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+function build(){
+  const list = [];
+  rules.forEach((r,ri) => r.ex.forEach((e,ei) =>
+    list.push({ ri, ei, e, opts: shuffle(e.o.map((t,i)=>({t, ok:i===0}))) })));
+  return list;
+}
+
+function steps(s){
+  return s.map(([t,m]) => `<div class="step">${t?`<span>${t}</span>`:''}${m?`<div class="ltr">${D(m)}</div>`:''}</div>`).join('');
+}
+
+function showStart(){
+  app.innerHTML = `<div class="sheet">
+    <h1>תרגול כללי אינטגרל</h1>
+    <p>בתרגול יש ${rules.length} כללים ו-${rules.reduce((n,r)=>n+r.ex.length,0)} תרגילים. לכל כלל יש דוגמה פתורה, ובכללים 1–3 יש גם דוגמה פתורה ותרגילים עם חזקה שלילית.</p>
+    <p>בכל תרגיל בוחרים את התשובה הנכונה ולוחצים "בדיקה". אחרי הבדיקה אפשר לראות את התשובה הנכונה או את הפתרון המלא. בסוף תקבלו ציון.</p>
+    <div class="row"><button class="btn" id="go">מתחילים</button></div>
+  </div>`;
+  document.getElementById('go').onclick = () => { items = build(); idx = 0; results = []; showQ(); };
+}
+
+function showQ(){
+  const it = items[idx], r = rules[it.ri];
+  const score = results.filter(Boolean).length;
+  let sel = null;
+  app.innerHTML = `<div class="sheet">
+    <div class="top"><span>תרגיל ${idx+1} מתוך ${items.length}</span><span>תשובות נכונות: ${score}</span></div>
+    <div class="bar"><div style="width:${idx/items.length*100}%"></div></div>
+    <div class="rule">
+      <h2>כלל ${it.ri+1}: ${r.name}</h2>
+      <div class="ltr">${D(r.f)}</div>
+      <details ${(it.ei===0||it.ei===2)?'open':''}><summary>${it.e.neg?'דוגמה פתורה: חזקה שלילית':'דוגמה פתורה'}</summary>
+        <div class="ltr">${D((it.e.neg?r.demoNeg:r.demo).q)}</div>${steps((it.e.neg?r.demoNeg:r.demo).s)}
+      </details>
+    </div>
+    <p class="ask">תרגיל ${it.ei+1} לכלל זה: חשבו את האינטגרל</p>
+    <div class="question">${D(it.e.q)}</div>
+    <div class="options">${it.opts.map((o,i)=>`<button class="opt" data-i="${i}">${M(o.t)}</button>`).join('')}</div>
+    <div class="row"><button class="btn" id="check" disabled>בדיקה</button></div>
+    <div id="after"></div>
+  </div>`;
+  window.scrollTo(0,0);
+
+  const opts = [...app.querySelectorAll('.opt')];
+  const check = document.getElementById('check');
+  opts.forEach(b => b.onclick = () => {
+    opts.forEach(x => x.classList.remove('selected'));
+    b.classList.add('selected'); sel = +b.dataset.i; check.disabled = false;
+  });
+
+  check.onclick = () => {
+    const ok = it.opts[sel].ok;
+    results.push(ok);
+    opts.forEach((b,i) => {
+      b.disabled = true;
+      if (it.opts[i].ok) b.classList.add('correct');
+      else if (i === sel) b.classList.add('wrong');
+    });
+    check.remove();
+    const last = idx === items.length - 1;
+    const right = it.opts.find(o => o.ok).t;
+    document.getElementById('after').innerHTML = `
+      <div class="feedback ${ok?'good':'bad'}">${ok ? 'נכון, כל הכבוד!' : 'לא נכון. התשובה הנכונה מסומנת בירוק.'}</div>
+      <div class="row">
+        <button class="btn ghost" id="showAns">הצג תשובה נכונה</button>
+        <button class="btn ghost" id="showSol">הצג פתרון מלא</button>
+        <button class="btn" id="next">${last ? 'לציון הסופי' : 'לתרגיל הבא'}</button>
+      </div>
+      <div class="box hidden" id="ans"><h3>התשובה הנכונה</h3><div class="ltr">${D(it.e.q + '=' + right)}</div></div>
+      <div class="box hidden" id="sol"><h3>פתרון מלא</h3><div class="ltr">${D(it.e.q)}</div>${steps(it.e.s)}</div>`;
+    const toggle = (btnId, boxId, showTxt, hideTxt) => {
+      const btn = document.getElementById(btnId), box = document.getElementById(boxId);
+      btn.onclick = () => { const h = box.classList.toggle('hidden'); btn.textContent = h ? showTxt : hideTxt; };
+    };
+    toggle('showAns','ans','הצג תשובה נכונה','הסתר תשובה נכונה');
+    toggle('showSol','sol','הצג פתרון מלא','הסתר פתרון מלא');
+    document.getElementById('next').onclick = () => { idx++; last ? showEnd() : showQ(); };
+  };
+}
+
+function showEnd(){
+  const score = results.filter(Boolean).length, total = items.length;
+  const grade = Math.round(score / total * 100);
+  const msg = grade >= 90 ? 'מצוין! שולטים בכללים.' :
+              grade >= 75 ? 'טוב מאוד! כדאי לחזור על הכללים שבהם טעיתם.' :
+              grade >= 55 ? 'יש התקדמות. חזרו על הדוגמאות הפתורות ונסו שוב.' :
+                            'כדאי לחזור על הכללים והדוגמאות הפתורות ולתרגל שוב.';
+  const rows = rules.map((r,ri) => {
+    const res = items.map((it,i)=>({it,ok:results[i]})).filter(x=>x.it.ri===ri).map(x=>x.ok ? '<span class="good">✓</span>' : '<span class="bad">✗</span>');
+    return `<tr><td>כלל ${ri+1}: ${r.name}</td><td>${res.join(' ')}</td></tr>`;
+  }).join('');
+  app.innerHTML = `<div class="sheet end">
+    <h1>סיימתם את התרגול</h1>
+    <div class="circle"><b>${grade}</b><span>${score} מתוך ${total}</span></div>
+    <p>${msg}</p>
+    <table><thead><tr><th>כלל</th><th>תרגילים</th></tr></thead><tbody>${rows}</tbody></table>
+    <div class="row"><button class="btn" id="again">תרגול מחדש</button></div>
+  </div>`;
+  window.scrollTo(0,0);
+  document.getElementById('again').onclick = () => { items = build(); idx = 0; results = []; showQ(); };
+}
+
+showStart();
+</script>
+</body>
+</html>
